@@ -1,4 +1,5 @@
 const express = require('express');
+const mysql = require('mysql2');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -6,7 +7,22 @@ const app = express();
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 
+// connect to database
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        // your mysql username,
+        user:'root',
+        // your mysql password,
+        password: 'P4ssc0de!',
+        database: 'election'
+    },
+    console.log('Connected to the election database')
+)
 
+db.query(`SELECT * FROM candidates`, (err,row) => {
+    console.log(row);
+});
 
 // route to handle user req that arent supported by app
 // it's a catch all route
