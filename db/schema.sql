@@ -1,6 +1,8 @@
+DROP TABLE IF EXISTS votes;
 DROP TABLE IF EXISTS candidates;
 DROP TABLE IF EXISTS parties;
 DROP TABLE IF EXISTS voters;
+
 
 CREATE TABLE parties (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -23,4 +25,16 @@ CREATE TABLE voters (
   last_name VARCHAR(30) NOT NULL,
   email VARCHAR(50) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE votes (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  voter_id INTEGER NOT NULL,
+  candidate_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  -- signifies voter id must be unique, can only appear once on table
+  CONSTRAINT uc_voter UNIQUE (voter_id),
+  -- deleting reference key will delete entire row from table using the cascade
+  CONSTRAINT fk_voter FOREIGN KEY (voter_id) REFERENCES voters(id) ON DELETE CASCADE,
+  CONSTRAINT fk_candidate FOREIGN KEY (candidate_id) REFERENCES candidates(id) ON DELETE CASCADE
 );
